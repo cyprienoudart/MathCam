@@ -1,90 +1,102 @@
+ 
 # PhotoMath
+
+
 ## 📱 Overview
+
 PhotoMath is a powerful iOS application that allows users to solve mathematical problems by simply taking a photo. Built with SwiftUI and AVFoundation, this app brings the convenience of optical character recognition (OCR) to mathematics, making problem-solving faster and more intuitive.
 
+---
+
 ## ✨ Features
+
 ### 📸 Camera Integration
 - Real-time camera preview with frame guides
 - Photo capture functionality for math problems
 - Optimized image processing for text recognition
+
 ### 🧮 Built-in Calculator
 - Comprehensive mathematical operations
 - Support for basic arithmetic: +, -, ×, ÷
 - Advanced functions: trigonometry, logarithms, calculus symbols
 - User-friendly interface with intuitive controls
+
 ### 📋 Menu System
 - Language selection (currently English)
 - Settings configuration
 - Help center access
 - About information
 - Premium features (PhotoMath Plus)
+
+---
+
 ## 🛠️ Technical Architecture
+
 ### Core Components
-- SwiftUI : Modern declarative UI framework
-- AVFoundation : Camera and photo capture capabilities
-- UIKit Integration : UIViewRepresentable for camera functionality
+- **SwiftUI**: Modern declarative UI framework
+- **AVFoundation**: Camera and photo capture capabilities
+- **UIKit Integration**: UIViewRepresentable for camera functionality
+
 ### Key Views
-- ContentView : Main application interface
-- CameraView : Camera preview and photo capture
-- CalculatorView : Mathematical operations interface
-- MenuView : Application settings and options
+- **ContentView**: Main application interface
+- **CameraView**: Camera preview and photo capture
+- **CalculatorView**: Mathematical operations interface
+- **MenuView**: Application settings and options
+
+---
+
 ## 🔄 Workflow
-mermaid
 
-Open Folder
+```mermaid
+graph TD
+    A[Launch App] --> B[Camera View]
+    B --> C{User Action}
+    C -->|Take Photo| D[Process Math Problem]
+    C -->|Open Calculator| E[Manual Calculation]
+    C -->|Open Menu| F[App Settings]
+    D --> G[Display Solution]
+    E --> G
+```
 
-1
-
-2
-
-3
-
-4
-
-5
-
-6
-
-7
-
-8
-
-graph TD
-
-A[Launch App] --> B[Camera View]
-
-B --> C{User Action}
-
-C -->|Take Photo| D[Process Math Problem]
-
-C -->|Open Calculator| E[Manual Calculation]
-
-C -->|Open Menu| F[App Settings]
-
-D --> G[Display Solution]
-
-E --> G
+---
 
 ## 🚀 Getting Started
+
 ### Prerequisites
 - iOS 18.4+
 - Xcode 16.3+
 - Swift 5.9+
 - iPhone with camera access
+
 ### Installation
 1. Clone the repository
 2. Open the project in Xcode
 3. Build and run on your device
+
+---
+
 ## 🔮 Future Enhancements
-- Handwriting recognition
-- Step-by-step solution explanations
-- Problem history and favorites
-- Cloud synchronization
-- Multi-language support
+
+- [ ] Handwriting recognition
+- [ ] Step-by-step solution explanations
+- [ ] Problem history and favorites
+- [ ] Cloud synchronization
+- [ ] Multi-language support
+
+---
+
 ## 📄 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+---
+
 ## 👨‍💻 Author
+
 Cyprien OUDART
 
-"Making mathematics accessible through technology"
+---
+
+*"Making mathematics accessible through technology"*
+
+        Too many current requests. Your queue position is 1. Please wait for a while or switch to other models for a smoother experience.
