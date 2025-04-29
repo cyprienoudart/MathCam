@@ -6,20 +6,30 @@
 //
 
 import SwiftUI
+import Foundation  // Add this import statement
 
 struct CalculatorView: View {
     @Binding var isShowing: Bool
-    @State private var inputText: String = "Type a math problem..."
+    @State private var inputText: String = ""
+    @State private var resultText: String = ""
     @State private var isEditing: Bool = false
     @State private var selectedTab: Int = 0
+    @State private var showingLetterKeyboard: Bool = false
     
     // Custom color
     let customRed = Color(hex: "#b62000")
     
     var body: some View {
         VStack(spacing: 0) {
-            // Header with title and close button
+            // Header with logo, title and close button
             HStack {
+                // Logo in top left
+                Image(systemName: "doc.text.image")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(customRed)
+                    .padding(.leading)
+                
                 Spacer()
                 
                 // Title centered
@@ -36,8 +46,8 @@ struct CalculatorView: View {
                     Text("Close")
                         .foregroundColor(customRed)
                         .fontWeight(.medium)
+                        .padding(.trailing)
                 }
-                .padding(.trailing)
             }
             .padding(.top, 10)
             .padding(.bottom, 20)
@@ -50,10 +60,19 @@ struct CalculatorView: View {
                         .padding(.horizontal)
                 }
                 
-                TextField("", text: $inputText)
+                TextField("", text: $inputText, onEditingChanged: { editing in
+                    isEditing = editing
+                })
                     .font(.system(size: 20))
                     .padding(.horizontal)
                     .foregroundColor(.black)
+                    .onChange(of: inputText) { newValue in
+                        if !newValue.isEmpty {
+                            solveEquation(newValue)
+                        } else {
+                            resultText = ""
+                        }
+                    }
             }
             .frame(height: 50)
             .overlay(
@@ -66,11 +85,26 @@ struct CalculatorView: View {
             )
             .padding(.bottom, 20)
             
+            // Result area - only visible when not empty
+            if !resultText.isEmpty {
+                HStack {
+                    Text(resultText)
+                        .font(.system(size: 18))
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                    Spacer()
+                }
+            }
+            
+            
             Spacer()
             
             // Function bar
             HStack {
-                Button(action: {}) {
+                Button(action: {
+                    showingLetterKeyboard.toggle()
+                }) {
                     Text("abc")
                         .frame(maxWidth: .infinity)
                         .foregroundColor(.black)
@@ -119,12 +153,12 @@ struct CalculatorView: View {
             // Function buttons (tabs)
             HStack {
                 Button(action: { selectedTab = 0 }) {
-                    VStack {
+                    VStack(spacing: 2) { // Reduced spacing
                         Text("+ −")
                         Text("× ÷")
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 6) // Reduced from 10
                     .background(selectedTab == 0 ? customRed : Color.white)
                     .foregroundColor(selectedTab == 0 ? .white : .black)
                     .cornerRadius(10)
@@ -186,40 +220,63 @@ struct CalculatorView: View {
             .padding(.vertical, 5)
             .background(Color.white)
             
-            // Keyboard content based on selected tab
-            TabView(selection: $selectedTab) {
-                // Tab 0: Basic operations
-                basicOperationsKeyboard()
-                    .tag(0)
-                
-                // Tab 1: Functions
-                functionsKeyboard()
-                    .tag(1)
-                
-                // Tab 2: Trigonometry
-                trigonometryKeyboard()
-                    .tag(2)
-                
-                // Tab 3: Calculus
-                calculusKeyboard()
-                    .tag(3)
+            // Keyboard content based on selected tab or letter keyboard
+            if showingLetterKeyboard {
+                letterKeyboard()
+                    .frame(height: 200) // Reduced from 240
+                    .background(Color.white)
+            } else {
+                TabView(selection: $selectedTab) {
+                    // Tab 0: Basic operations
+                    basicOperationsKeyboard()
+                        .tag(0)
+                    
+                    // Tab 1: Functions
+                    functionsKeyboard()
+                        .tag(1)
+                    
+                    // Tab 2: Trigonometry
+                    trigonometryKeyboard()
+                        .tag(2)
+                    
+                    // Tab 3: Calculus
+                    calculusKeyboard()
+                        .tag(3)
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .frame(height: 200) // Reduced from 240
+                .background(Color.white)
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .frame(height: 240)
-            .background(Color.white)
         }
         .background(Color.white)
         .frame(height: UIScreen.main.bounds.height - 80) // Leave approximately 2cm at top
         .edgesIgnoringSafeArea(.bottom)
     }
     
-    // Basic operations keyboard
+    // Basic operations keyboard with updated symbols from image
     private func basicOperationsKeyboard() -> some View {
         VStack(spacing: 0) {
             // Row 1
             HStack(spacing: 0) {
-                keyButton("(", color: customRed)
-                keyButton(")", color: customRed)
+                // Parentheses with dotted square
+                Button(action: {
+                    appendToInput("(")
+                }) {
+                    Image(systemName: "parentheses")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(customRed)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.white)
+                        .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+                
+                // Greater than symbol
+                keyButton(">", color: customRed)
+                
                 keyButton("7")
                 keyButton("8")
                 keyButton("9")
@@ -228,8 +285,57 @@ struct CalculatorView: View {
             
             // Row 2
             HStack(spacing: 0) {
-                keyButton("□", color: customRed)
-                keyButton("√", color: customRed)
+                // Fraction with solid bar and lighter squares
+                Button(action: {
+                    appendToInput("/")
+                }) {
+                    ZStack {
+                        // Top square (lighter)
+                        Rectangle()
+                            .stroke(Color.black.opacity(0.3), lineWidth: 1)
+                            .frame(width: 20, height: 20)
+                            .offset(y: -15)
+                        
+                        // Solid middle bar
+                        Rectangle()
+                            .frame(height: 2)
+                            .foregroundColor(.black)
+                        
+                        // Bottom square (lighter)
+                        Rectangle()
+                            .stroke(Color.black.opacity(0.3), lineWidth: 1)
+                            .frame(width: 20, height: 20)
+                            .offset(y: 15)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+                
+                // Square root with dotted square
+                Button(action: {
+                    appendToInput("√")
+                }) {
+                    ZStack {
+                        Text("√")
+                            .font(.system(size: 24))
+                            .foregroundColor(customRed)
+                        
+                        Rectangle()
+                            .stroke(style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.black)
+                            .offset(x: 10)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+                
                 keyButton("4")
                 keyButton("5")
                 keyButton("6")
@@ -238,7 +344,28 @@ struct CalculatorView: View {
             
             // Row 3
             HStack(spacing: 0) {
-                keyButton("^2", color: customRed)
+                // Square with dotted square and exponent
+                Button(action: {
+                    appendToInput("^2")
+                }) {
+                    ZStack {
+                        Rectangle()
+                            .stroke(style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.black)
+                        
+                        Text("²")
+                            .font(.system(size: 16))
+                            .foregroundColor(customRed)
+                            .offset(x: 15, y: -10)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+                
                 keyButton("x", color: customRed)
                 keyButton("1")
                 keyButton("2")
@@ -256,6 +383,107 @@ struct CalculatorView: View {
                 keyButton("+", color: customRed)
             }
         }
+    }
+    
+    // Letter keyboard with small square buttons
+    private func letterKeyboard() -> some View {
+        VStack(spacing: 0) {
+            // Row 1
+            HStack(spacing: 0) {
+                letterButton("q")
+                letterButton("w")
+                letterButton("e")
+                letterButton("r")
+                letterButton("t")
+                letterButton("y")
+                letterButton("u")
+                letterButton("i")
+                letterButton("o")
+                letterButton("p")
+            }
+            
+            // Row 2
+            HStack(spacing: 0) {
+                letterButton("a")
+                letterButton("s")
+                letterButton("d")
+                letterButton("f")
+                letterButton("g")
+                letterButton("h")
+                letterButton("j")
+                letterButton("k")
+                letterButton("l")
+            }
+            
+            // Row 3
+            HStack(spacing: 0) {
+                letterButton("z")
+                letterButton("x")
+                letterButton("c")
+                letterButton("v")
+                letterButton("b")
+                letterButton("n")
+                letterButton("m")
+                
+                // Delete button
+                Button(action: {
+                    if !inputText.isEmpty {
+                        inputText = String(inputText.dropLast())
+                    }
+                }) {
+                    Image(systemName: "delete.left")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundColor(.black)
+                        .background(Color.white)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+            }
+            
+            // Row 4
+            HStack(spacing: 0) {
+                // Return to number keyboard
+                Button(action: {
+                    showingLetterKeyboard = false
+                }) {
+                    Text("123")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundColor(.black)
+                        .background(Color.white)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+                
+                // Space button
+                Button(action: {
+                    appendToInput(" ")
+                }) {
+                    Text("space")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundColor(.black)
+                        .background(Color.white)
+                }
+                .border(Color.gray.opacity(0.3), width: 0.5)
+                .frame(height: 60)
+            }
+        }
+    }
+    
+    // Letter button in small square format
+    private func letterButton(_ letter: String) -> some View {
+        Button(action: {
+            appendToInput(letter)
+        }) {
+            Text(letter)
+                .frame(width: 40, height: 40)
+                .foregroundColor(.black)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                )
+        }
+        .padding(2)
     }
     
     // Functions keyboard
@@ -411,6 +639,17 @@ struct CalculatorView: View {
     // Function to append text to input
     private func appendToInput(_ text: String) {
         inputText += text
+        if !inputText.isEmpty {
+            solveEquation(inputText)
+        }
+    }
+    
+    private func solveEquation(_ equation: String) {
+        #if os(macOS)
+        resultText = PythonBridge.solveMathProblem(equation)
+        #else
+        resultText = SwiftMathSolver.solve(equation)
+        #endif
     }
 }
 
