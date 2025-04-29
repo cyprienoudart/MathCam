@@ -177,9 +177,22 @@ struct ContentView: View {
             
             // Show calculator sheet
             if showingCalculator {
-                CalculatorView(isShowing: $showingCalculator)
-                    .transition(.move(edge: .bottom))
-                    .edgesIgnoringSafeArea(.all)
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showingCalculator = false
+                        }
+                    
+                    VStack {
+                        Spacer(minLength: 80) // Approximately 2cm top margin
+                        
+                        CalculatorView(isShowing: $showingCalculator)
+                            .transition(.move(edge: .bottom))
+                    }
+                    .edgesIgnoringSafeArea(.bottom)
+                }
+                .zIndex(1)
             }
             
             // Show history sheet
