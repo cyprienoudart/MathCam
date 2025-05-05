@@ -1,6 +1,4 @@
- 
 # PhotoMath
-
 
 ## 📱 Overview
 
@@ -36,6 +34,7 @@ PhotoMath is a powerful iOS application that allows users to solve mathematical 
 - **SwiftUI**: Modern declarative UI framework
 - **AVFoundation**: Camera and photo capture capabilities
 - **UIKit Integration**: UIViewRepresentable for camera functionality
+- **Vision Framework**: For OCR and math symbol recognition
 
 ### Key Views
 - **ContentView**: Main application interface
@@ -82,6 +81,8 @@ graph TD
 - [ ] Problem history and favorites
 - [ ] Cloud synchronization
 - [ ] Multi-language support
+- [ ] Dark mode support
+- [ ] Offline capability
 
 ---
 
@@ -97,6 +98,4 @@ Cyprien OUDART
 
 ---
 
-*"Making mathematics accessible through technology"*
-
-        Too many current requests. Your queue position is 1. Please wait for a while or switch to other models for a smoother experience.
+*"Making mathematics accessible through technology"* 
