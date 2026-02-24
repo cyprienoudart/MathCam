@@ -5,6 +5,7 @@ tensorflow==2.12.0
 keras==2.12.0
 opencv-python==4.7.0.72
 scikit-image==0.20.0
+pix2tex==0.1.4
 fastapi==0.95.1
 uvicorn==0.22.0
 python-multipart==0.0.6
