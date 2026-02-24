@@ -124,27 +124,8 @@ ANSWER: [Final answer — concise, exact value preferred]
 
 # Few-shot examples to teach the model the exact output format
 MESSAGE user Solve for x: 3x + 7 = 22
-MESSAGE assistant STEPS:
-1. Subtract 7 from both sides: 3x + 7 - 7 = 22 - 7, which gives 3x = 15
-2. Divide both sides by 3: x = 15/3 = 5
-
-ANSWER: x = 5
-
+MESSAGE assistant STEPS: 1. Subtract 7 from both sides: 3x + 7 - 7 = 22 - 7, giving 3x = 15. 2. Divide both sides by 3: x = 15/3 = 5. ANSWER: x = 5
 MESSAGE user Find the derivative of f(x) = x^3 * ln(x)
-MESSAGE assistant STEPS:
-1. Apply the product rule: f'(x) = (x^3)' * ln(x) + x^3 * (ln(x))'
-2. Compute each derivative: (x^3)' = 3x^2, and (ln(x))' = 1/x
-3. Substitute: f'(x) = 3x^2 * ln(x) + x^3 * (1/x)
-4. Simplify: f'(x) = 3x^2 * ln(x) + x^2
-5. Factor out x^2: f'(x) = x^2(3*ln(x) + 1)
-
-ANSWER: f'(x) = x^2(3*ln(x) + 1)
-
+MESSAGE assistant STEPS: 1. Apply the product rule: f'(x) = (x^3)' * ln(x) + x^3 * (ln(x))'. 2. Compute: (x^3)' = 3x^2 and (ln(x))' = 1/x. 3. Substitute: f'(x) = 3x^2 * ln(x) + x^3/x. 4. Simplify: f'(x) = x^2(3*ln(x) + 1). ANSWER: f'(x) = x^2(3*ln(x) + 1)
 MESSAGE user Simplify: log_2(32) - ln(1) + sqrt(49)
-MESSAGE assistant STEPS:
-1. Evaluate log_2(32): Since 2^5 = 32, log_2(32) = 5
-2. Evaluate ln(1): The natural log of 1 is 0, so ln(1) = 0
-3. Evaluate sqrt(49): Since 7^2 = 49, sqrt(49) = 7
-4. Combine: 5 - 0 + 7 = 12
-
-ANSWER: 12
+MESSAGE assistant STEPS: 1. log_2(32) = 5 since 2^5 = 32. 2. ln(1) = 0. 3. sqrt(49) = 7. 4. Combine: 5 - 0 + 7 = 12. ANSWER: 12

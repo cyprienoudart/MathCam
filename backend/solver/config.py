@@ -16,10 +16,10 @@ class SolverConfig:
     """
 
     # The Ollama model to use. Any model available via `ollama list` works.
-    # Recommended: "qwen2-math:7b" (purpose-built for math)
-    # Alternatives: "deepseek-r1:7b", "phi3:mini", "qwen2-math:1.5b"
+    # Recommended: "mathcam" (custom model with enhanced math prompts)
+    # Alternatives: "qwen2-math:7b", "deepseek-r1:7b", "phi3:mini"
     model: str = field(
-        default_factory=lambda: os.getenv("MATHCAM_MODEL", "qwen2-math:7b")
+        default_factory=lambda: os.getenv("MATHCAM_MODEL", "mathcam")
     )
 
     # Ollama server host. Default is local.
