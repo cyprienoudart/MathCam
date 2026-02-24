@@ -1,11 +1,19 @@
-sympy==1.11.1
-numpy==1.24.3
-pillow==9.5.0
-tensorflow==2.12.0
-keras==2.12.0
-opencv-python==4.7.0.72
-scikit-image==0.20.0
-fastapi==0.95.1
-uvicorn==0.22.0
-python-multipart==0.0.6
-pydantic==1.10.7 
+# MathCam Backend Dependencies
+
+# --- LLM ---
+ollama                 # Ollama Python SDK for local LLM inference
+
+# --- API ---
+fastapi>=0.100.0       # Web framework
+uvicorn>=0.22.0        # ASGI server
+python-multipart       # Form data parsing (for file uploads)
+pydantic>=2.0          # Data validation and structured models
+
+# --- Utilities ---
+python-dotenv          # Load .env files
+numpy>=1.24.0          # Numerical computing
+pillow>=9.5.0          # Image processing
+
+# --- Testing ---
+pytest>=7.0.0          # Test framework
+pytest-asyncio>=0.21.0 # Async test support
